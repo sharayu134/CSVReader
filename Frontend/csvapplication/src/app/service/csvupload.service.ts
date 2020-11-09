@@ -17,7 +17,7 @@ export class CsvuploadService {
     payload.append('file', file);
 
     return this.http.post(
-      `http://localhost:8080/MarginedRates`
+      `http://localhost:8080/marginedrates`
         , payload
         );
   }

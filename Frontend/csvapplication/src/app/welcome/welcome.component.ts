@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CsvuploadService } from '../service/csvupload.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-welcome',
@@ -8,7 +9,7 @@ import { CsvuploadService } from '../service/csvupload.service';
 })
 export class WelcomeComponent implements OnInit {
 
-  constructor( private csvuploadService: CsvuploadService) { }
+  constructor( private csvuploadService: CsvuploadService, private toastr: ToastrService) { }
 
   file: File;
   message: string;
@@ -25,11 +26,11 @@ export class WelcomeComponent implements OnInit {
             .subscribe (
               data => {
                 console.log(data);
-                // this.router.navigate(['welcome', this.id]);
               }
             // tslint:disable-next-line:align
             ); this.message = 'File Uploaded successfully';
       this.uploaded = true;
+      this.toastr.info('File uploaded successfully', '');
     }
 
     selectFile(event) {
@@ -37,6 +38,7 @@ export class WelcomeComponent implements OnInit {
       console.log( this.file);
       if (!this.validateFile(this.file.name)){
         this.invalidfileformat = true;
+        this.toastr.error('Incorrect file format', '');
         this.handleCancel();
       }
     }

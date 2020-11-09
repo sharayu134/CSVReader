@@ -4,18 +4,16 @@
       <br>
       <h1>Upload CSV here</h1>
       <br>
-      
       <input type="file" class="form-control-file" id="file" (change)="selectFile($event)"  name="file" enctype="multipart/form-data" accept=".csv">
       <br>
     </div>
-   
-  </form>
-  <button class="btn btn-primary btn-block" (click)="handleUpload()" [disabled]="!file">Upoload</button>
+  </form> 
+  
+  <button class="btn btn-primary btn-block" (click)="handleUpload()" [disabled]="!file">Upload</button>
 
 
   <br>
   <button class="btn btn-primary btn-block" (click)="handleCancel()">Cancel</button> 
   <br>
-  <!-- <div class="alert alert-warning" role="alert" *ngIf="invalidfileformat">Only upload .csv files</div> -->
-  <div class="alert alert-primary" role="alert" *ngIf="uploaded">{{message}}</div>
   </div>
+  <!-- <input type="file" class="form-control-file" id="file" (change)="selectFile($event)"  name="file" enctype="multipart/form-data" accept=".csv"> -->
