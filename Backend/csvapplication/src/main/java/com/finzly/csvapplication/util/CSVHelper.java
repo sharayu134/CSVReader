@@ -14,12 +14,20 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.finzly.csvapplication.model.MarginedRates;
+import com.finzly.csvapplication.model.MarginedRate;
 
 
+/**
+ * @author USER This class is used to parse csv records to MarginedRates 
+ *
+ */
 public class CSVHelper {
+	
+
   public static String TYPE = "text/csv";
   static String[] HEADERs = { "DATE", "CURRENCY_NAME", "CURRENCY_CODE","TERMS","INTERNAL_SPOT_RATE","BUY_RATE","SELL_RATE","BOSS_RATE","CUTOFF_TIME" };
 
@@ -32,21 +40,22 @@ public class CSVHelper {
     return false;
   }
 
-  public static List<MarginedRates> csvToMysql(InputStream is) {
+  public static List<MarginedRate> csvToMarginedRate(InputStream is) {
+	  
     try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
         CSVParser csvParser = new CSVParser(fileReader,
             CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
-      List<MarginedRates> marginedRatesList = new ArrayList<>();
+      List<MarginedRate> marginedRateList = new ArrayList<>();
 
       Iterable<CSVRecord> csvRecords = csvParser.getRecords();
        String emptyDate="";
       for (CSVRecord csvRecord : csvRecords) {
-    	  MarginedRates marginedRates;
+    	  MarginedRate marginedRate;
     	  if(!emptyDate.equals( csvRecord.get("DATE"))) {
     	  
 		try {
-			marginedRates = new MarginedRates(
+			marginedRate = new MarginedRate(
 					new SimpleDateFormat("dd-MMM-yyyy").parse(csvRecord.get("DATE")),
 					  csvRecord.get("CURRENCY_NAME"),
 					  csvRecord.get("CURRENCY_CODE"),
@@ -57,16 +66,18 @@ public class CSVHelper {
 					  Double.parseDouble(csvRecord.get("BOSS_RATE")),
 					  LocalTime.parse(csvRecord.get("CUTOFF_TIME"))
 					  );
-			  marginedRatesList.add(marginedRates);
+			  marginedRateList.add(marginedRate);
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			Logger logger = LoggerFactory.getLogger(CSVHelper.class);
+			logger.error("Error in NumberFormatException ",e);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			Logger logger = LoggerFactory.getLogger(CSVHelper.class);
+			logger.error("Error in ParseException ",e);
 		}
       }
       }
 
-      return marginedRatesList;
+      return marginedRateList;
     } catch (IOException e) {
       throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
     }
