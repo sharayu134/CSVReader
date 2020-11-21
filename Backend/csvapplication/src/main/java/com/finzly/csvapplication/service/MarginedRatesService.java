@@ -22,7 +22,7 @@ public class MarginedRatesService {
 
 	  public void save(MultipartFile file) throws NumberFormatException, ParseException {
 	    try {
-	      List<MarginedRates> marginedRates = CSVHelper.csvToMysql(file.getInputStream());
+	      List<MarginedRates> marginedRates = CSVHelper.csvToMarginedRate(file.getInputStream());
 	      marginedRatesRepository.saveAll(marginedRates);
 	    } catch (IOException e) {
 	      throw new RuntimeException("fail to store csv data: " + e.getMessage());
