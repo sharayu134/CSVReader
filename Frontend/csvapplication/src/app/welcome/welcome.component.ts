@@ -30,7 +30,7 @@ export class WelcomeComponent implements OnInit {
             // tslint:disable-next-line:align
             ); this.message = 'File Uploaded successfully';
       this.uploaded = true;
-      this.toastr.info('File uploaded successfully', '');
+      // this.toastr.info('File uploaded successfully', '');
     }
 
     selectFile(event) {
